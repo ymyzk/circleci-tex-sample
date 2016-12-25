@@ -1,0 +1,12 @@
+machine:
+  services:
+    - docker
+dependencies:
+  override:
+    - docker info
+    - docker build -t tex .
+test:
+  override:
+    - docker run -v $(pwd):/app --name tex tex latexmk
+  post:
+    - docker cp tex:/app/paper.pdf $CIRCLE_ARTIFACTS/
